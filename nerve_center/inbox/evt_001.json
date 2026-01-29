@@ -1,0 +1,14 @@
+{
+  "id": "evt_001",
+  "type": "email_received",
+  "source": "gmail",
+  "channel": "email",
+  "timestamp": "2026-01-26T19:01:15.226430",
+  "priority": 2,
+  "data": {
+    "from": "john.smith@acmecorp.com",
+    "from_name": "John Smith",
+    "subject": "Re: Project Update - Urgent",
+    "snippet": "Hi, I wanted to follow up on the project timeline. Can we schedule a call today?"
+  }
+}

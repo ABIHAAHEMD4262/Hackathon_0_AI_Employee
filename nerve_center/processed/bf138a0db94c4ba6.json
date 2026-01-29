@@ -1,0 +1,13 @@
+{
+  "id": "bf138a0db94c4ba6",
+  "type": "scheduled_task",
+  "source": "scheduler",
+  "timestamp": "2026-01-26T20:55:15.136494",
+  "data": {
+    "task_name": "Morning Email Check",
+    "action": "Check and categorize overnight emails"
+  },
+  "priority": 3,
+  "requires_approval": false,
+  "processed": true
+}

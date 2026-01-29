@@ -1,0 +1,13 @@
+{
+  "id": "evt_002",
+  "type": "whatsapp_message",
+  "source": "whatsapp",
+  "channel": "whatsapp",
+  "timestamp": "2026-01-26T18:01:15.226456",
+  "priority": 3,
+  "data": {
+    "from": "+1-555-0101",
+    "from_name": "Sarah Johnson",
+    "body": "Hey! Got the proposal. Looking good, will review and get back to you."
+  }
+}

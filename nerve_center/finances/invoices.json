@@ -1,0 +1,143 @@
+[
+  {
+    "id": "inv_001",
+    "number": "INV-2026-0001",
+    "type": "sent",
+    "from_name": "Your Company",
+    "from_email": "billing@yourcompany.com",
+    "to_name": "Acme Corporation",
+    "to_email": "ap@acmecorp.com",
+    "line_items": [
+      {
+        "description": "Web Development Services - January",
+        "quantity": 40,
+        "unit_price": 150,
+        "tax_rate": 0
+      }
+    ],
+    "currency": "USD",
+    "discount": 0,
+    "issue_date": "2026-01-11T19:01:15.186900",
+    "due_date": "2026-02-10T19:01:15.186934",
+    "paid_date": null,
+    "status": "sent",
+    "notes": "Thank you for your business!",
+    "payment_terms": "Net 30",
+    "created_at": "2026-01-11T19:01:15.186941",
+    "updated_at": "2026-01-26T19:01:15.186946"
+  },
+  {
+    "id": "inv_002",
+    "number": "INV-2026-0002",
+    "type": "sent",
+    "from_name": "Your Company",
+    "from_email": "billing@yourcompany.com",
+    "to_name": "Tech Startup Inc",
+    "to_email": "finance@techstartup.io",
+    "line_items": [
+      {
+        "description": "Consulting - Strategy Session",
+        "quantity": 8,
+        "unit_price": 200,
+        "tax_rate": 0
+      },
+      {
+        "description": "Implementation Support",
+        "quantity": 16,
+        "unit_price": 150,
+        "tax_rate": 0
+      }
+    ],
+    "currency": "USD",
+    "discount": 200,
+    "issue_date": "2026-01-21T19:01:15.186953",
+    "due_date": "2026-02-20T19:01:15.186958",
+    "paid_date": null,
+    "status": "sent",
+    "notes": "",
+    "payment_terms": "Net 30",
+    "created_at": "2026-01-21T19:01:15.186964",
+    "updated_at": "2026-01-26T19:01:15.186968"
+  },
+  {
+    "id": "inv_003",
+    "number": "INV-2026-0003",
+    "type": "sent",
+    "from_name": "Your Company",
+    "from_email": "billing@yourcompany.com",
+    "to_name": "Old Client Co",
+    "to_email": "payments@oldclient.com",
+    "line_items": [
+      {
+        "description": "Monthly Retainer - December",
+        "quantity": 1,
+        "unit_price": 3000,
+        "tax_rate": 0
+      }
+    ],
+    "currency": "USD",
+    "discount": 0,
+    "issue_date": "2025-12-12T19:01:15.186974",
+    "due_date": "2026-01-11T19:01:15.186979",
+    "paid_date": null,
+    "status": "overdue",
+    "notes": "",
+    "payment_terms": "Net 30",
+    "created_at": "2025-12-12T19:01:15.186985",
+    "updated_at": "2026-01-26T19:01:15.186989"
+  },
+  {
+    "id": "bill_001",
+    "number": "BILL-2026-0001",
+    "type": "received",
+    "from_name": "AWS",
+    "from_email": "billing@aws.amazon.com",
+    "to_name": "Your Company",
+    "to_email": "you@yourcompany.com",
+    "line_items": [
+      {
+        "description": "AWS Services - January",
+        "quantity": 1,
+        "unit_price": 287.45,
+        "tax_rate": 0
+      }
+    ],
+    "currency": "USD",
+    "discount": 0,
+    "issue_date": "2026-01-23T19:01:15.186995",
+    "due_date": "2026-02-22T19:01:15.187000",
+    "paid_date": null,
+    "status": "sent",
+    "notes": "",
+    "payment_terms": "Net 30",
+    "created_at": "2026-01-23T19:01:15.187006",
+    "updated_at": "2026-01-26T19:01:15.187011"
+  },
+  {
+    "id": "bill_002",
+    "number": "BILL-2026-0002",
+    "type": "received",
+    "from_name": "Contractor Jane",
+    "from_email": "jane@freelancer.com",
+    "to_name": "Your Company",
+    "to_email": "you@yourcompany.com",
+    "line_items": [
+      {
+        "description": "Design Work - Landing Pages",
+        "quantity": 20,
+        "unit_price": 75,
+        "tax_rate": 0
+      }
+    ],
+    "currency": "USD",
+    "discount": 0,
+    "issue_date": "2026-01-19T19:01:15.187016",
+    "due_date": "2026-02-02T19:01:15.187021",
+    "paid_date": null,
+    "status": "sent",
+    "notes": "Pending approval",
+    "payment_terms": "Net 14",
+    "created_at": "2026-01-19T19:01:15.187027",
+    "updated_at": "2026-01-26T19:01:15.187032"
+  }
+]

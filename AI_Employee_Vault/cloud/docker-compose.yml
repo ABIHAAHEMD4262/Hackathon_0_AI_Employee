@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  # Main AI Employee Orchestrator
+  orchestrator:
+    build:
+      context: ..
+      dockerfile: cloud/Dockerfile
+    container_name: ai_employee_orchestrator
+    restart: unless-stopped
+    volumes:
+      - vault_data:/app/vault
+      - ./logs:/app/vault/Logs
+    environment:
+      - VAULT_PATH=/app/vault
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "python", "-c", "print('healthy')"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  # Gmail Watcher (runs separately for better isolation)
+  gmail_watcher:
+    build:
+      context: ..
+      dockerfile: cloud/Dockerfile
+    container_name: ai_employee_gmail
+    restart: unless-stopped
+    command: ["python", "watchers/gmail_watcher.py", "/app/vault"]
+    volumes:
+      - vault_data:/app/vault
+      - ./credentials:/app/credentials:ro
+    environment:
+      - VAULT_PATH=/app/vault
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/token.json
+    depends_on:
+      - orchestrator
+
+  # LinkedIn Watcher
+  linkedin_watcher:
+    build:
+      context: ..
+      dockerfile: cloud/Dockerfile
+    container_name: ai_employee_linkedin
+    restart: unless-stopped
+    command: ["python", "watchers/linkedin_watcher.py", "/app/vault"]
+    volumes:
+      - vault_data:/app/vault
+    environment:
+      - VAULT_PATH=/app/vault
+      - LINKEDIN_ACCESS_TOKEN=${LINKEDIN_ACCESS_TOKEN}
+    depends_on:
+      - orchestrator
+
+  # Approval Workflow Monitor
+  approval_monitor:
+    build:
+      context: ..
+      dockerfile: cloud/Dockerfile
+    container_name: ai_employee_approvals
+    restart: unless-stopped
+    command: ["python", "watchers/approval_workflow.py", "/app/vault"]
+    volumes:
+      - vault_data:/app/vault
+    depends_on:
+      - orchestrator
+
+  # CEO Briefing (runs weekly via cron)
+  ceo_briefing:
+    build:
+      context: ..
+      dockerfile: cloud/Dockerfile
+    container_name: ai_employee_briefing
+    restart: "no"
+    command: ["python", "watchers/ceo_briefing.py", "/app/vault"]
+    volumes:
+      - vault_data:/app/vault
+    profiles:
+      - briefing  # Only run manually or via cron
+
+  # Vault Sync (syncs with local machine via Git)
+  vault_sync:
+    image: alpine/git:latest
+    container_name: ai_employee_sync
+    restart: unless-stopped
+    volumes:
+      - vault_data:/vault
+      - ./git-credentials:/root/.git-credentials:ro
+    environment:
+      - GIT_REPO=${GIT_REPO:-}
+      - SYNC_INTERVAL=${SYNC_INTERVAL:-300}
+    command: |
+      sh -c '
+        if [ -z "$GIT_REPO" ]; then
+          echo "No GIT_REPO set, sync disabled"
+          sleep infinity
+        else
+          cd /vault
+          git config --global credential.helper store
+          while true; do
+            git pull origin main || true
+            git add -A
+            git commit -m "Auto-sync $(date)" || true
+            git push origin main || true
+            sleep $SYNC_INTERVAL
+          done
+        fi
+      '
+    profiles:
+      - sync  # Only enable if using git sync
+
+volumes:
+  vault_data:
+    driver: local
+
+networks:
+  default:
+    name: ai_employee_network

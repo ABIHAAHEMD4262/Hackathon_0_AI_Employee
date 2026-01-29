@@ -1,0 +1,43 @@
+{
+  "main": {
+    "id": "main",
+    "type": "split",
+    "children": [
+      {
+        "id": "left-sidebar",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {}
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "left",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "file-explorer",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {}
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "right",
+    "type": "mobile-drawer",
+    "children": [],
+    "currentTab": 0
+  },
+  "active": "main",
+  "lastOpenFiles": [
+    "Dashboard.md",
+    "Company_Handbook.md"
+  ]
+}

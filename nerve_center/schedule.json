@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Morning Email Check",
+    "cron": "0 9 * * 1-5",
+    "action": "Check and categorize overnight emails",
+    "last_run": "2026-01-26T20:55:15.136494"
+  },
+  {
+    "name": "Weekly Review",
+    "cron": "0 16 * * 5",
+    "action": "Generate weekly CEO briefing",
+    "last_run": "2026-01-26T20:55:15.136494"
+  },
+  {
+    "name": "Invoice Reminder",
+    "cron": "0 10 * * 1",
+    "action": "Check for overdue invoices",
+    "last_run": "2026-01-26T20:55:15.136494"
+  },
+  {
+    "name": "Dashboard Update",
+    "cron": "*/15 * * * *",
+    "action": "Refresh dashboard statistics",
+    "last_run": "2026-01-26T20:55:15.136494"
+  }
+]

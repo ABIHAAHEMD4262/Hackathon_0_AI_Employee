@@ -1,0 +1,13 @@
+{
+  "id": "f05ccaf92cdb43cf",
+  "type": "scheduled_task",
+  "source": "scheduler",
+  "timestamp": "2026-01-26T20:55:15.136494",
+  "data": {
+    "task_name": "Invoice Reminder",
+    "action": "Check for overdue invoices"
+  },
+  "priority": 3,
+  "requires_approval": false,
+  "processed": true
+}

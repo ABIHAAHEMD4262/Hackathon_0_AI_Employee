@@ -1,0 +1,15 @@
+[project]
+name = "watchers"
+version = "0.1.0"
+description = "AI Employee Watcher Scripts - Monitor Gmail, LinkedIn, and filesystem for automation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "google-auth>=2.35.0",
+    "google-auth-oauthlib>=1.2.1",
+    "google-auth-httplib2>=0.2.0",
+    "google-api-python-client>=2.154.0",
+    "playwright>=1.49.1",
+    "watchdog>=6.0.0",
+    "python-dotenv>=1.0.1",
+]

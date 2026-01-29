@@ -1,0 +1,55 @@
+[
+  {
+    "id": "exp_001",
+    "description": "Notion Subscription",
+    "amount": 16.0,
+    "category": "subscriptions",
+    "date": "2026-01-26T19:01:15.191387",
+    "vendor": "Notion",
+    "is_recurring": true,
+    "recurring_frequency": "monthly",
+    "approved": true
+  },
+  {
+    "id": "exp_002",
+    "description": "GitHub Team",
+    "amount": 44.0,
+    "category": "software",
+    "date": "2026-01-26T19:01:15.191415",
+    "vendor": "GitHub",
+    "is_recurring": true,
+    "recurring_frequency": "monthly",
+    "approved": true
+  },
+  {
+    "id": "exp_003",
+    "description": "Google Workspace",
+    "amount": 18.0,
+    "category": "software",
+    "date": "2026-01-26T19:01:15.191419",
+    "vendor": "Google",
+    "is_recurring": true,
+    "recurring_frequency": "monthly",
+    "approved": true
+  },
+  {
+    "id": "exp_004",
+    "description": "Facebook Ads - January Campaign",
+    "amount": 500.0,
+    "category": "marketing",
+    "date": "2026-01-21T19:01:15.191423",
+    "vendor": "Meta",
+    "is_recurring": false,
+    "approved": true
+  },
+  {
+    "id": "exp_005",
+    "description": "New Monitor",
+    "amount": 349.99,
+    "category": "equipment",
+    "date": "2026-01-16T19:01:15.191438",
+    "vendor": "Amazon",
+    "is_recurring": false,
+    "approved": false
+  }
+]

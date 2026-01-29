@@ -1,0 +1,13 @@
+{
+  "id": "evt_005",
+  "type": "calendar_reminder",
+  "source": "calendar",
+  "channel": "calendar",
+  "timestamp": "2026-01-26T19:01:15.226489",
+  "priority": 2,
+  "data": {
+    "summary": "Client Call - Acme Corporation",
+    "start": "2026-01-26T21:01:15.226493",
+    "minutes_until": 120
+  }
+}

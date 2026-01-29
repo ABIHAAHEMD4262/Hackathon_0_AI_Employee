@@ -1,0 +1,13 @@
+{
+  "id": "435e10a7a2a77d9d",
+  "type": "scheduled_task",
+  "source": "scheduler",
+  "timestamp": "2026-01-26T19:55:06.336180",
+  "data": {
+    "task_name": "Dashboard Update",
+    "action": "Refresh dashboard statistics"
+  },
+  "priority": 3,
+  "requires_approval": false,
+  "processed": true
+}

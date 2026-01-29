@@ -1,0 +1,81 @@
+{
+  "project_name": "AI Employee",
+  "description": "Personal AI Employee - Autonomous business assistant with human-in-the-loop approval",
+  "version": "1.0.0",
+  "author": "Syeda Abiha Ahmed",
+
+  "skills_directory": ".claude/skills",
+
+  "enabled_skills": [
+    "email-manager",
+    "whatsapp-manager",
+    "social-media-manager",
+    "ceo-briefing",
+    "task-orchestrator",
+    "accounting-manager"
+  ],
+
+  "vault_structure": {
+    "inbox": "Inbox/",
+    "needs_action": "Needs_Action/",
+    "approvals": "Approvals/",
+    "approved": "Approved/",
+    "rejected": "Rejected/",
+    "done": "Done/",
+    "logs": "Logs/",
+    "tasks": "Tasks/",
+    "plans": "Plans/",
+    "business": "Business/"
+  },
+
+  "automation_rules": {
+    "auto_approve_threshold": "never",
+    "max_retries": 3,
+    "retry_delay_seconds": 60,
+    "check_interval_seconds": 120
+  },
+
+  "security": {
+    "require_approval_for": [
+      "send_email",
+      "send_whatsapp",
+      "post_social_media",
+      "execute_payment",
+      "delete_files"
+    ],
+    "auto_approve_for": [
+      "read_files",
+      "create_drafts",
+      "generate_reports"
+    ]
+  },
+
+  "notifications": {
+    "high_priority_alert": true,
+    "daily_summary": true,
+    "error_notifications": true
+  },
+
+  "integrations": {
+    "gmail": {
+      "enabled": true,
+      "check_interval": 120
+    },
+    "whatsapp": {
+      "enabled": true,
+      "check_interval": 60
+    },
+    "linkedin": {
+      "enabled": false,
+      "requires_api_key": true
+    },
+    "twitter": {
+      "enabled": false,
+      "requires_api_key": true
+    },
+    "odoo": {
+      "enabled": true,
+      "requires_api_key": true
+    }
+  }
+}

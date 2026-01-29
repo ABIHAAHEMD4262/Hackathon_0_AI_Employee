@@ -1,0 +1,122 @@
+[
+  {
+    "id": "contact_001",
+    "name": "John Smith",
+    "email": "john.smith@acmecorp.com",
+    "type": "client",
+    "status": "active",
+    "company": "Acme Corporation",
+    "title": "CEO",
+    "phone": "+1-555-0101",
+    "lead_stage": null,
+    "lead_value": 0,
+    "tags": [
+      "enterprise",
+      "priority"
+    ],
+    "is_vip": true,
+    "last_contact": "2026-01-24T19:01:15.182640",
+    "next_follow_up": "2026-01-29T19:01:15.182701",
+    "created_at": "2025-10-28T19:01:15.182713",
+    "updated_at": "2026-01-26T19:01:15.182719",
+    "source": "referral"
+  },
+  {
+    "id": "contact_002",
+    "name": "Sarah Johnson",
+    "email": "sarah@techstartup.io",
+    "type": "lead",
+    "status": "active",
+    "company": "Tech Startup Inc",
+    "title": "CTO",
+    "phone": "+1-555-0102",
+    "lead_stage": "proposal",
+    "lead_value": 15000,
+    "tags": [
+      "startup",
+      "saas"
+    ],
+    "is_vip": false,
+    "last_contact": "2026-01-21T19:01:15.182727",
+    "next_follow_up": "2026-01-27T19:01:15.182732",
+    "created_at": "2026-01-12T19:01:15.182738",
+    "updated_at": "2026-01-26T19:01:15.182743",
+    "source": "website"
+  },
+  {
+    "id": "contact_003",
+    "name": "Mike Chen",
+    "email": "mike@designagency.com",
+    "type": "partner",
+    "status": "active",
+    "company": "Design Agency Co",
+    "title": "Creative Director",
+    "phone": "+1-555-0103",
+    "lead_stage": null,
+    "lead_value": 0,
+    "tags": [
+      "design",
+      "partner"
+    ],
+    "is_vip": true,
+    "last_contact": "2025-12-22T19:01:15.182759",
+    "next_follow_up": null,
+    "created_at": "2025-07-30T19:01:15.182765",
+    "updated_at": "2026-01-26T19:01:15.182771",
+    "source": "conference"
+  },
+  {
+    "id": "contact_004",
+    "name": "Emily Davis",
+    "email": "emily@newclient.com",
+    "type": "lead",
+    "status": "active",
+    "company": "New Client LLC",
+    "title": "Marketing Manager",
+    "phone": "+1-555-0104",
+    "lead_stage": "qualified",
+    "lead_value": 8000,
+    "tags": [
+      "marketing",
+      "small-business"
+    ],
+    "is_vip": false,
+    "last_contact": "2026-01-26T16:01:15.182777",
+    "next_follow_up": "2026-01-28T19:01:15.182784",
+    "created_at": "2026-01-19T19:01:15.182790",
+    "updated_at": "2026-01-26T19:01:15.182795",
+    "source": "linkedin"
+  },
+  {
+    "id": "contact_005",
+    "name": "David Wilson",
+    "email": "david@bigenterprise.com",
+    "type": "lead",
+    "status": "active",
+    "company": "Big Enterprise Inc",
+    "title": "VP of Operations",
+    "phone": "+1-555-0105",
+    "lead_stage": "negotiation",
+    "lead_value": 50000,
+    "tags": [
+      "enterprise",
+      "high-value"
+    ],
+    "is_vip": true,
+    "last_contact": "2026-01-25T19:01:15.182800",
+    "next_follow_up": "2026-01-26T19:01:15.182806",
+    "created_at": "2025-12-27T19:01:15.182809",
+    "updated_at": "2026-01-26T19:01:15.182822",
+    "source": "cold-outreach"
+  },
+  {
+    "id": "contact_1769704027683",
+    "name": "Abiha",
+    "email": "abihaahmed413@gmail.com",
+    "company": "GIAIC",
+    "type": "client",
+    "status": "active",
+    "is_vip": false,
+    "created_at": "2026-01-29T16:27:07.683Z"
+  }
+]

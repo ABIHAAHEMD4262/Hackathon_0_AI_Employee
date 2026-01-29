@@ -1,0 +1,15 @@
+{
+  "id": "evt_003",
+  "type": "invoice_detected",
+  "source": "filesystem",
+  "channel": "filesystem",
+  "timestamp": "2026-01-26T17:01:15.226474",
+  "priority": 2,
+  "requires_approval": true,
+  "data": {
+    "filename": "invoice_contractor_jan2026.pdf",
+    "filepath": "nerve_center/inbox/invoice_contractor_jan2026.pdf",
+    "vendor": "Contractor Jane",
+    "amount": 1500.0
+  }
+}

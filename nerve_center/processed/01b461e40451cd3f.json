@@ -1,0 +1,13 @@
+{
+  "id": "01b461e40451cd3f",
+  "type": "scheduled_task",
+  "source": "scheduler",
+  "timestamp": "2026-01-26T19:55:06.336180",
+  "data": {
+    "task_name": "Weekly Review",
+    "action": "Generate weekly CEO briefing"
+  },
+  "priority": 3,
+  "requires_approval": false,
+  "processed": true
+}

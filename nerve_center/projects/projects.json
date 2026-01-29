@@ -1,0 +1,41 @@
+[
+  {
+    "id": "proj_001",
+    "name": "Website Redesign",
+    "description": "Complete redesign of company website",
+    "client": "Acme Corporation",
+    "status": "active",
+    "start_date": "2025-12-27T19:01:15.195652",
+    "deadline": "2026-02-25T19:01:15.195686",
+    "budget": 15000,
+    "budget_spent": 6000,
+    "created_at": "2025-12-27T19:01:15.195692",
+    "updated_at": "2026-01-26T19:01:15.195696"
+  },
+  {
+    "id": "proj_002",
+    "name": "Mobile App MVP",
+    "description": "Build MVP for mobile application",
+    "client": "Tech Startup Inc",
+    "status": "active",
+    "start_date": "2026-01-12T19:01:15.195702",
+    "deadline": "2026-03-27T19:01:15.195707",
+    "budget": 25000,
+    "budget_spent": 5000,
+    "created_at": "2026-01-12T19:01:15.195711",
+    "updated_at": "2026-01-26T19:01:15.195715"
+  },
+  {
+    "id": "proj_003",
+    "name": "Marketing Automation",
+    "description": "Set up email marketing automation",
+    "client": "Internal",
+    "status": "planning",
+    "start_date": null,
+    "deadline": "2026-03-12T19:01:15.195719",
+    "budget": 5000,
+    "budget_spent": 0,
+    "created_at": "2026-01-19T19:01:15.195723",
+    "updated_at": "2026-01-26T19:01:15.195727"
+  }
+]

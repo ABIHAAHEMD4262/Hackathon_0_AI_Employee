@@ -1,0 +1,14 @@
+{
+  "id": "evt_004",
+  "type": "slack_message",
+  "source": "slack",
+  "channel": "slack",
+  "timestamp": "2026-01-26T18:31:15.226482",
+  "priority": 4,
+  "data": {
+    "channel_name": "#general",
+    "user_name": "TeamMember",
+    "text": "Just pushed the latest changes. Ready for review!",
+    "is_mention": false
+  }
+}
