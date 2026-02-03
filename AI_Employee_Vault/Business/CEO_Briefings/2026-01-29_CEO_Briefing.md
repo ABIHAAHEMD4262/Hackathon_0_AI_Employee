@@ -1,5 +1,5 @@
 ---
-generated: 2026-01-29T16:28:16.926Z
+generated: 2026-01-29T17:58:26.092Z
 period: 2026-01-22 to 2026-01-29
 type: ceo_briefing
 ---
