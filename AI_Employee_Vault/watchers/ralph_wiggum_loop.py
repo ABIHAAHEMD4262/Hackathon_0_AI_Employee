@@ -109,7 +109,7 @@ class RalphWiggumLoop:
 
         try:
             # Step 1: Read and parse the task
-            task_content = task_file.read_text()
+            task_content = task_file.read_text(encoding='utf-8', errors='replace')
             task_data = self._parse_task(task_content)
 
             # Step 2: Create or load execution plan
@@ -265,7 +265,7 @@ This step requires your approval before the AI Employee can proceed.
 
 *Waiting for human approval...*
 '''
-        approval_file.write_text(content)
+        approval_file.write_text(content, encoding='utf-8')
         logger.info(f"Created approval request: {approval_file}")
 
         # Poll for approval
@@ -287,7 +287,7 @@ This step requires your approval before the AI Employee can proceed.
 
             # Check if file content has [x] APPROVE or [x] REJECT
             if approval_file.exists():
-                content = approval_file.read_text().lower()
+                content = approval_file.read_text(encoding='utf-8', errors='replace').lower()
                 if '[x]' in content and 'approve' in content:
                     approval_file.rename(approved_path)
                     return {"approved": True}

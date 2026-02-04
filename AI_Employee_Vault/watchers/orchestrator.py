@@ -84,7 +84,7 @@ class AIEmployeeOrchestrator:
         # Scan all subfolders and root
         for item in self.needs_action.rglob('*.md'):
             try:
-                content = item.read_text()
+                content = item.read_text(encoding='utf-8', errors='replace')
                 task = self._parse_task(item, content)
                 tasks.append(task)
             except Exception as e:
@@ -190,7 +190,7 @@ status: in_progress
 *Plan created by AI Employee Orchestrator*
 *Last updated: ''' + datetime.now().strftime('%Y-%m-%d %H:%M') + '*\n'
 
-        plan_path.write_text(plan_content)
+        plan_path.write_text(plan_content, encoding='utf-8')
         logger.info(f"Created plan: {plan_path}")
 
         return plan_path
@@ -278,11 +278,11 @@ status: in_progress
                           if datetime.fromtimestamp(f.stat().st_mtime).date() == datetime.now().date()])
 
         # Update last updated timestamp
-        content = dashboard_path.read_text()
+        content = dashboard_path.read_text(encoding='utf-8')
         content = self._update_dashboard_field(content, 'Last Updated',
                                                 datetime.now().strftime('%Y-%m-%d %H:%M PM'))
 
-        dashboard_path.write_text(content)
+        dashboard_path.write_text(content, encoding='utf-8')
         logger.info("Dashboard updated")
 
     def _update_dashboard_field(self, content: str, field: str, value: str) -> str:
@@ -328,7 +328,7 @@ status: in_progress
         """Log orchestrator actions."""
         log_file = self.logs / f'orchestrator_{datetime.now().strftime("%Y%m%d")}.md'
 
-        with open(log_file, 'a') as f:
+        with open(log_file, 'a', encoding='utf-8') as f:
             f.write(f"\n## {datetime.now().strftime('%H:%M:%S')} - {action}\n")
             f.write(f"- {details}\n")
 
