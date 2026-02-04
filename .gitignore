@@ -43,8 +43,10 @@ Thumbs.db
 
 # Logs
 *.log
-logs/
+nerve_center/logs/
 AI_Employee_Vault/Logs/*.log
+# Keep .gitkeep files inside Logs subdirectories
+!AI_Employee_Vault/Logs/**/.gitkeep
 
 # Test outputs
 test_results.json

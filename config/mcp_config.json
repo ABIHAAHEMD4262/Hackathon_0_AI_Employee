@@ -15,6 +15,18 @@
       "capabilities": ["send_email", "draft_email", "list_drafts", "get_email_status"]
     },
     {
+      "name": "email_node",
+      "description": "Node.js Email MCP Server (JSON-RPC over stdin/stdout)",
+      "command": "node",
+      "args": ["AI_Employee_Vault/mcp_servers/email_mcp.js"],
+      "env": {
+        "EMAIL_USER": "${GMAIL_USER}",
+        "EMAIL_PASS": "${GMAIL_APP_PASSWORD}",
+        "VAULT_PATH": "AI_Employee_Vault"
+      },
+      "capabilities": ["send_email", "draft_email", "list_drafts"]
+    },
+    {
       "name": "social_media",
       "description": "Social Media MCP Server for Facebook, Instagram, Twitter",
       "command": "python",

@@ -198,7 +198,7 @@ All sensitive actions require human approval:
 |---------|---------|----------|
 | Gmail | Monitor inbox | 2 min |
 | LinkedIn | Track messages | 5 min |
-| WhatsApp | Business messages | 30 sei c |
+| WhatsApp | Business messages | 30 sec |
 | Calendar | Events sync | 5 min |
 | Slack | Team messages | 1 min |
 

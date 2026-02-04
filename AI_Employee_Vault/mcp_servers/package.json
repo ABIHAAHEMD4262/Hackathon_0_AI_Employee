@@ -1,0 +1,16 @@
+{
+  "name": "ai-employee-mcp-servers",
+  "version": "1.0.0",
+  "description": "MCP servers for the AI Employee system",
+  "private": true,
+  "scripts": {
+    "start:email": "node email_mcp.js",
+    "start:all": "node email_mcp.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
