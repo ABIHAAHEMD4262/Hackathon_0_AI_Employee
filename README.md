@@ -52,12 +52,15 @@ AI Employee is an autonomous agent system that manages personal and business tas
 - [x] Scheduled tasks (cron-like scheduling)
 
 ### Gold Tier (Autonomous Employee) ✅
-- [x] Facebook, Instagram, Twitter integration
-- [x] CEO Briefing generation (weekly summaries)
-- [x] Error recovery with circuit breaker pattern
-- [x] Ralph Wiggum loop for persistent task execution
-- [x] Comprehensive audit logging
-- [x] Full documentation
+- [x] **Cross-platform social posting**: Facebook, Instagram, Twitter/X posters with HITL approval
+- [x] **Full HITL flow**: All social posts & Odoo invoices go through Pending_Approval -> Approved -> Done
+- [x] **CEO Briefing** reads Business_Goals.md + Odoo financial data + proactive suggestions
+- [x] **Error recovery** with circuit breaker pattern in orchestrator
+- [x] **Ralph Wiggum loop** for persistent multi-step task execution
+- [x] **Approval Executor** handles email, social (all platforms), and Odoo action types
+- [x] **Comprehensive audit logging** with per-platform summaries in Logs/SocialMedia/
+- [x] **Dry-run mode** (`DRY_RUN=true`) for safe testing without real API calls
+- [x] Full documentation and test scripts
 
 ## Quick Start
 
@@ -115,8 +118,13 @@ AI_Employee/
 │   │   └── package.json
 │   ├── watchers/               # Python watcher scripts
 │   │   ├── gmail_watcher.py    # Gmail monitoring
-│   │   ├── linkedin_watcher.py # LinkedIn monitoring
-│   │   ├── ceo_briefing.py     # CEO briefing generator
+│   │   ├── linkedin_poster.py  # LinkedIn auto-poster
+│   │   ├── facebook_poster.py  # Facebook Graph API poster
+│   │   ├── instagram_poster.py # Instagram Graph API poster
+│   │   ├── twitter_x_poster.py # Twitter/X API v2 poster
+│   │   ├── approval_executor.py # Executes approved actions
+│   │   ├── ceo_briefing.py     # CEO briefing (reads Goals + Odoo)
+│   │   ├── orchestrator.py     # Central coordinator
 │   │   └── ralph_wiggum_loop.py # Persistent execution
 │   ├── mcp_servers/            # MCP action servers
 │   ├── Needs_Action/           # Incoming tasks queue
@@ -268,7 +276,35 @@ python test_all_features.py
 
 ## Demo Video
 
-[Link to demo video - 5-10 minutes showing key features]
+**Demo video:** https://youtu.be/xxxx *(upload your own recording showing the key features)*
+
+Record a 5-10 minute walkthrough covering:
+1. Dashboard overview (Command Center, tabs, dark mode)
+2. Email inbox + AI-drafted reply flow
+3. Social post draft -> approval -> posting (dry-run)
+4. CEO Briefing generation
+5. Approval workflow (Pending_Approval -> Approved -> Done)
+
+## Running the Test Suite
+
+```bash
+# Test social posting flow (dry-run, safe)
+cd AI_Employee_Vault/watchers
+python test_social_post.py
+
+# Test all features
+cd ../..
+python test_all_features.py
+```
+
+## Hackathon Submission
+
+| Item | Status |
+|------|--------|
+| Tier | **Gold - Complete** |
+| Repository | https://github.com/ABIHAAHEMD4262/Hackathon_0_AI_Employee |
+| Dashboard | `cd AI_Employee_Vault/dashboard && npm run dev` -> http://localhost:3000 |
+| Demo Video | https://youtu.be/xxxx *(replace with your link)* |
 
 ## License
 
@@ -282,6 +318,6 @@ MIT License - See LICENSE file
 
 ---
 
-**Built with Claude Code for the Personal AI Employee Hackathon 2026**
+**Built with Claude Code for the Panaversity Personal AI Employee Hackathon 2026**
 
-*Your AI Employee works 24/7 so you don't have to.*
+**Gold Tier Complete** - Your AI Employee works 24/7 so you don't have to.

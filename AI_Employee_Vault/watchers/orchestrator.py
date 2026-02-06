@@ -355,6 +355,58 @@ status: in_progress
 
         return results
 
+    def _run_watcher_safely(self, name: str, func):
+        """Run a watcher function with error handling and recovery."""
+        try:
+            func()
+            logger.info(f"[{name}] completed successfully")
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            logger.error(f"[{name}] failed: {e}")
+            self._log_action('watcher_error', f"{name}: {e}")
+
+            # Attempt error recovery
+            try:
+                from error_recovery import ErrorRecovery
+                recovery = ErrorRecovery(str(self.vault_path))
+                recovery.handle_error(name, str(e))
+                logger.info(f"[{name}] error recovery invoked")
+            except ImportError:
+                logger.warning("error_recovery module not available")
+            except Exception as recovery_err:
+                logger.error(f"[{name}] recovery also failed: {recovery_err}")
+
+    def run_all_watchers(self):
+        """Run all social / approval watchers in a single pass."""
+        watchers_dir = Path(__file__).parent
+
+        # Approval executor - process any queued approvals
+        try:
+            from approval_executor import ApprovalExecutor
+            executor = ApprovalExecutor(str(self.vault_path))
+            self._run_watcher_safely('ApprovalExecutor', executor.run_once)
+        except ImportError:
+            logger.warning("approval_executor not available")
+
+        # Social media posters - check for approved posts
+        social_posters = [
+            ('FacebookPoster', 'facebook_poster', 'FacebookPoster'),
+            ('InstagramPoster', 'instagram_poster', 'InstagramPoster'),
+            ('TwitterXPoster', 'twitter_x_poster', 'TwitterXPoster'),
+        ]
+
+        for display_name, module_name, class_name in social_posters:
+            try:
+                mod = __import__(module_name)
+                poster_cls = getattr(mod, class_name)
+                poster = poster_cls(str(self.vault_path))
+                self._run_watcher_safely(display_name, poster.run_once)
+            except ImportError:
+                logger.debug(f"{display_name} module not available")
+            except Exception as e:
+                logger.error(f"{display_name} init failed: {e}")
+
     def run(self):
         """
         Run the orchestrator continuously.
@@ -369,15 +421,21 @@ status: in_progress
 
         while True:
             try:
+                # Core cycle: scan Needs_Action, create plans, move tasks
                 results = self.run_cycle()
                 if results:
                     for result in results:
                         logger.info(f"Processed: {result}")
+
+                # Run all watchers (approval executor + social posters)
+                self.run_all_watchers()
+
             except KeyboardInterrupt:
                 logger.info("Orchestrator stopped by user")
                 break
             except Exception as e:
                 logger.error(f"Error in orchestrator cycle: {e}")
+                self._log_action('cycle_error', str(e))
 
             time.sleep(self.check_interval)
 

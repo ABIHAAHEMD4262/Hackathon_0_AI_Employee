@@ -44,6 +44,13 @@ class CEOBriefingGenerator:
             'logs': self.vault_path / 'Logs'
         }
 
+        # Business data sources
+        self.business_goals_paths = [
+            self.vault_path / 'Business' / 'Goals' / 'Business_Goals.md',
+            self.vault_path.parent / 'nerve_center' / 'Business_Goals.md',
+        ]
+        self.finances_path = self.vault_path.parent / 'nerve_center' / 'finances'
+
         logger.info(f"CEO Briefing Generator initialized for: {vault_path}")
 
     def generate_weekly_briefing(self) -> Path:
@@ -63,7 +70,11 @@ class CEOBriefingGenerator:
         communication_metrics = self._analyze_communications()
         social_metrics = self._analyze_social_media()
         system_health = self._check_system_health()
-        recommendations = self._generate_recommendations(task_metrics, communication_metrics)
+        financial_data = self._read_financial_data()
+        business_goals = self._read_business_goals()
+        recommendations = self._generate_proactive_suggestions(
+            task_metrics, communication_metrics, financial_data
+        )
 
         # Generate the briefing
         briefing_content = f'''# 📊 Weekly CEO Briefing
@@ -176,12 +187,23 @@ Based on the analysis above, here are your priorities:
 
 ## 💰 Financial Overview
 
-*Note: Connect accounting system (Odoo) for detailed financial metrics*
+| Metric | Amount |
+|--------|--------|
+| Revenue (paid invoices) | ${financial_data['total_revenue']:,.0f} |
+| Outstanding Receivables | ${financial_data['outstanding_ar']:,.0f} |
+| Total Expenses | ${financial_data['total_expenses']:,.0f} |
+| Outstanding Payables | ${financial_data['outstanding_ap']:,.0f} |
+| Net Position | ${financial_data['total_revenue'] - financial_data['total_expenses']:,.0f} |
+| Invoices Sent | {financial_data['invoices_sent']} |
+| Invoices Received | {financial_data['invoices_received']} |
 
-### Estimated This Month
-- Revenue Target: $2,000 - $5,000
-- Estimated Hours Available: 160 hours
-- Hourly Rate: $75 - $100
+*Data sourced from Odoo integration / nerve_center finances.*
+
+---
+
+## 🎯 Business Goals Alignment
+
+{business_goals}
 
 ---
 
@@ -448,6 +470,139 @@ Based on the analysis above, here are your priorities:
         recs.append("🎯 **Focus**: Quality over quantity - better to do fewer things well")
 
         return '\n'.join([f"{i+1}. {rec}" for i, rec in enumerate(recs)])
+
+    def _read_business_goals(self) -> str:
+        """Read Business_Goals.md and extract current priorities."""
+        for goals_path in self.business_goals_paths:
+            if goals_path.exists():
+                try:
+                    content = goals_path.read_text(encoding='utf-8', errors='replace')
+                    # Extract key sections
+                    sections = []
+
+                    # Annual goals
+                    if 'Annual Goals' in content:
+                        start = content.index('Annual Goals')
+                        end = content.index('---', start + 10) if '---' in content[start + 10:] else start + 500
+                        sections.append(content[start:start + end - start][:400])
+
+                    # Strategic priorities
+                    if 'What AI Should Prioritize' in content:
+                        start = content.index('What AI Should Prioritize')
+                        end_pos = content.find('---', start + 10)
+                        chunk = content[start:end_pos if end_pos > 0 else start + 400]
+                        sections.append(chunk[:400])
+
+                    if sections:
+                        return '\n\n'.join(sections)
+                    return "Business goals file found but no structured data extracted."
+                except Exception as e:
+                    logger.warning(f"Error reading business goals: {e}")
+        return "No Business_Goals.md found. Create one for richer briefings."
+
+    def _read_financial_data(self) -> Dict[str, Any]:
+        """Read financial data from nerve_center/finances (Odoo integration data)."""
+        data = {
+            'invoices_sent': 0,
+            'invoices_received': 0,
+            'total_revenue': 0.0,
+            'total_expenses': 0.0,
+            'outstanding_ar': 0.0,
+            'outstanding_ap': 0.0,
+        }
+
+        # Read invoices.json
+        invoices_file = self.finances_path / 'invoices.json'
+        if invoices_file.exists():
+            try:
+                invoices = json.loads(invoices_file.read_text(encoding='utf-8'))
+                for inv in invoices:
+                    subtotal = sum(
+                        (li.get('quantity', 0) * li.get('unit_price', 0))
+                        for li in inv.get('line_items', [])
+                    ) - inv.get('discount', 0)
+
+                    if inv.get('type') == 'sent':
+                        data['invoices_sent'] += 1
+                        if inv.get('status') == 'paid':
+                            data['total_revenue'] += subtotal
+                        elif inv.get('status') not in ('cancelled',):
+                            data['outstanding_ar'] += subtotal
+                    elif inv.get('type') == 'received':
+                        data['invoices_received'] += 1
+                        if inv.get('status') == 'paid':
+                            data['total_expenses'] += subtotal
+                        elif inv.get('status') not in ('cancelled',):
+                            data['outstanding_ap'] += subtotal
+            except Exception as e:
+                logger.warning(f"Error reading invoices: {e}")
+
+        # Read expenses.json
+        expenses_file = self.finances_path / 'expenses.json'
+        if expenses_file.exists():
+            try:
+                expenses = json.loads(expenses_file.read_text(encoding='utf-8'))
+                data['total_expenses'] += sum(e.get('amount', 0) for e in expenses)
+            except Exception as e:
+                logger.warning(f"Error reading expenses: {e}")
+
+        return data
+
+    def _generate_proactive_suggestions(self, tasks: Dict, comms: Dict, financials: Dict) -> str:
+        """Generate proactive AI suggestions based on all data."""
+        suggestions = []
+
+        # Approval backlog
+        if tasks['pending_approval'] > 3:
+            suggestions.append(
+                "**Clear approval backlog** - {n} items waiting. Set aside 15 min to review.".format(
+                    n=tasks['pending_approval']
+                ))
+
+        # Outstanding receivables
+        if financials['outstanding_ar'] > 0:
+            suggestions.append(
+                "**Follow up on outstanding invoices** - ${ar:,.0f} in accounts receivable. "
+                "Send payment reminders.".format(ar=financials['outstanding_ar'])
+            )
+
+        # Expenses growing
+        if financials['total_expenses'] > financials['total_revenue'] * 0.8 and financials['total_revenue'] > 0:
+            suggestions.append(
+                "**Review expenses** - Expenses are {pct:.0f}% of revenue. "
+                "Consider cancelling unused subscriptions or renegotiating vendor rates.".format(
+                    pct=(financials['total_expenses'] / max(financials['total_revenue'], 1)) * 100
+                ))
+
+        # Social media gap
+        social_posted = self.vault_path / 'Marketing' / 'Social_Posted'
+        recent_posts = 0
+        if social_posted.exists():
+            from datetime import timedelta
+            week_ago = datetime.now() - timedelta(days=7)
+            recent_posts = len([
+                f for f in social_posted.glob('*.md')
+                if datetime.fromtimestamp(f.stat().st_mtime) > week_ago
+            ])
+        if recent_posts < 3:
+            suggestions.append(
+                "**Increase social posting** - Only {n} posts this week. "
+                "Aim for 3-5 posts across LinkedIn/Twitter/Facebook.".format(n=recent_posts)
+            )
+
+        # Email response
+        if comms.get('emails_pending', 0) > 5:
+            suggestions.append(
+                "**Reduce email backlog** - {n} emails pending. "
+                "Prioritize VIP contacts first.".format(n=comms['emails_pending'])
+            )
+
+        # Default growth tip
+        suggestions.append(
+            "**Growth tip**: Share your hackathon project progress on LinkedIn to attract clients."
+        )
+
+        return '\n'.join([f"{i+1}. {s}" for i, s in enumerate(suggestions)])
 
     def _create_briefing_notification(self, briefing_path: Path):
         """Create a notification in Needs_Action about the new briefing."""

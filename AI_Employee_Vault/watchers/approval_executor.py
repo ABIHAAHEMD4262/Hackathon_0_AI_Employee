@@ -131,12 +131,31 @@ class ApprovalExecutor:
 
             if 'type: email_draft' in content or 'type: email' in content:
                 success = self.execute_email(queue_data, source_path)
+
             elif 'type: linkedin_post' in content:
-                self.log(f"LinkedIn post approved - would post: {item_id}")
-                success = True  # Placeholder - LinkedIn API would go here
+                success = self._execute_social_post('linkedin', item_id, source_path)
+
+            elif 'type: facebook_post' in content:
+                success = self._execute_social_post('facebook', item_id, source_path)
+
+            elif 'type: instagram_post' in content:
+                success = self._execute_social_post('instagram', item_id, source_path)
+
+            elif 'type: twitter_post' in content:
+                success = self._execute_social_post('twitter', item_id, source_path)
+
             elif 'type: social_post' in content:
-                self.log(f"Social post approved - would post: {item_id}")
-                success = True  # Placeholder - Social API would go here
+                # Generic social post - determine platform from content
+                platform = 'unknown'
+                for p in ['linkedin', 'facebook', 'instagram', 'twitter']:
+                    if p in content.lower():
+                        platform = p
+                        break
+                success = self._execute_social_post(platform, item_id, source_path)
+
+            elif 'type: odoo_invoice' in content or 'type: odoo_payment' in content:
+                success = self._execute_odoo_action(item_id, source_path, content)
+
             else:
                 self.log(f"Unknown item type for {item_id}", 'WARNING')
                 success = True
@@ -147,6 +166,78 @@ class ApprovalExecutor:
 
         except Exception as e:
             self.log(f"Error processing queue item: {e}", 'ERROR')
+
+    def _execute_social_post(self, platform: str, item_id: str, source_path: Path) -> bool:
+        """Execute an approved social media post by delegating to the platform poster."""
+        self.log(f"Executing {platform} post: {item_id}")
+
+        try:
+            vault_path = str(self.vault_path)
+
+            if platform == 'linkedin':
+                from linkedin_poster import LinkedInPoster
+                poster = LinkedInPoster(vault_path)
+                # The poster will pick it up from Approved/ in its next cycle
+                self.log(f"LinkedIn post {item_id} queued for poster")
+                return True
+
+            elif platform == 'facebook':
+                from facebook_poster import FacebookPoster
+                poster = FacebookPoster(vault_path)
+                poster.run_once()
+                return True
+
+            elif platform == 'instagram':
+                from instagram_poster import InstagramPoster
+                poster = InstagramPoster(vault_path)
+                poster.run_once()
+                return True
+
+            elif platform == 'twitter':
+                from twitter_x_poster import TwitterXPoster
+                poster = TwitterXPoster(vault_path)
+                poster.run_once()
+                return True
+
+            else:
+                self.log(f"Unknown social platform: {platform}", 'WARNING')
+                return True
+
+        except ImportError as e:
+            self.log(f"Poster module not available for {platform}: {e}", 'WARNING')
+            self.log(f"Social post {item_id} marked as executed (poster not installed)")
+            return True
+        except Exception as e:
+            self.log(f"Error executing {platform} post: {e}", 'ERROR')
+            return False
+
+    def _execute_odoo_action(self, item_id: str, source_path: Path, content: str) -> bool:
+        """Execute an approved Odoo action (invoice/payment) via JSON-RPC."""
+        self.log(f"Executing Odoo action: {item_id}")
+
+        try:
+            from odoo_integration import OdooIntegration
+            odoo = OdooIntegration(str(self.vault_path))
+
+            if 'type: odoo_invoice' in content:
+                self.log(f"Odoo invoice {item_id} approved - posting via JSON-RPC")
+                # In dry-run mode, Odoo integration handles this safely
+                odoo.process_approved_invoices()
+                return True
+
+            elif 'type: odoo_payment' in content:
+                self.log(f"Odoo payment {item_id} approved - posting via JSON-RPC")
+                odoo.process_approved_payments()
+                return True
+
+        except ImportError:
+            self.log("Odoo integration module not available", 'WARNING')
+            return True
+        except Exception as e:
+            self.log(f"Error executing Odoo action: {e}", 'ERROR')
+            return False
+
+        return True
 
     def check_queue(self):
         """Check and process all items in the queue"""

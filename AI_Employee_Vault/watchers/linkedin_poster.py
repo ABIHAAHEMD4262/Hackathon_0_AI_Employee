@@ -29,10 +29,17 @@ class LinkedInPoster:
         load_dotenv()
 
         self.vault_path = Path(vault_path)
-        self.approvals = self.vault_path / 'Approvals'
+        self.pending_approval = self.vault_path / 'Pending_Approval'
+        self.approvals = self.pending_approval  # alias for compatibility
         self.approved = self.vault_path / 'Approved'
         self.done = self.vault_path / 'Done'
         self.logs = self.vault_path / 'Logs'
+        self.social_logs = self.logs / 'SocialMedia'
+
+        for folder in [self.pending_approval, self.approved, self.done, self.social_logs]:
+            folder.mkdir(parents=True, exist_ok=True)
+
+        self.dry_run = os.getenv('DRY_RUN', 'true').lower() == 'true'
 
         # Session for persistent login
         self.session_path = Path(session_path) if session_path else self.vault_path / '.linkedin_session'
@@ -158,9 +165,18 @@ class LinkedInPoster:
                 body = body.replace('# ', '').replace('## ', '').replace('**', '')
                 body = body.replace('*This', '\n\n*This')  # Keep AI notice
 
+                # Extract topic from frontmatter
+                topic = 'LinkedIn Post'
+                fm = parts[1]
+                for line in fm.split('\n'):
+                    if line.strip().startswith('topic:'):
+                        topic = line.split(':', 1)[1].strip()
+                        break
+
                 return {
                     'content': body,
-                    'file_path': file_path
+                    'file_path': file_path,
+                    'topic': topic,
                 }
 
         except Exception as e:
@@ -190,6 +206,8 @@ class LinkedInPoster:
             success = await self.create_post(post_data['content'])
 
             if success:
+                # Write posting summary
+                self._write_summary(file_path.name, post_data.get('topic', 'LinkedIn Post'))
                 # Move to Done
                 new_path = self.done / file_path.name
                 file_path.rename(new_path)
@@ -203,17 +221,18 @@ class LinkedInPoster:
     def create_post_draft(self, topic: str, style: str = 'professional') -> Path:
         """Create a draft LinkedIn post for approval"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f"linkedin-post-{timestamp}.md"
-        filepath = self.approvals / filename
+        filename = f"SOCIAL_LI_{timestamp}.md"
+        filepath = self.pending_approval / filename
 
         # Generate post content based on topic
         if style == 'professional':
             content = f"""---
 type: linkedin_post
 title: LinkedIn Post about {topic}
-status: pending
+status: pending_approval
 created: {datetime.now().isoformat()}
 platform: linkedin
+topic: {topic}
 ---
 
 # LinkedIn Post Draft
@@ -241,9 +260,10 @@ What are your thoughts? Let me know in the comments!
             content = f"""---
 type: linkedin_post
 title: LinkedIn Post about {topic}
-status: pending
+status: pending_approval
 created: {datetime.now().isoformat()}
 platform: linkedin
+topic: {topic}
 ---
 
 # LinkedIn Post Draft
@@ -261,6 +281,30 @@ platform: linkedin
         self.log(f"Created draft: {filename}")
 
         return filepath
+
+    def _write_summary(self, filename: str, topic: str = 'LinkedIn Post'):
+        """Write a posting summary to Logs/SocialMedia/."""
+        ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+        summary_file = self.social_logs / f'linkedin_summary_{ts}.md'
+        summary = f"""---
+platform: linkedin
+posted_at: {datetime.now().isoformat()}
+source_file: {filename}
+dry_run: false
+---
+
+# LinkedIn Post Summary
+
+**Posted:** {datetime.now().strftime('%Y-%m-%d %H:%M')}
+**Topic:** {topic}
+**Status:** Published
+
+---
+
+*Logged by AI Employee*
+"""
+        summary_file.write_text(summary, encoding='utf-8')
+        self.log(f"Summary written: {summary_file.name}")
 
     async def run_once(self):
         """Process approved posts once"""
